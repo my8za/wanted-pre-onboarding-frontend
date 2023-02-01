@@ -1,67 +1,107 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+// library
+import axios from 'axios';
+// api_url
+import { API_URL } from '../utils/constants/Config';
+// components
 import EditMode from '../components/EditMode';
 import TodoBoard from '../components/TodoBoard';
 import TodoInput from '../components/TodoInput'
 
 const Todo = () => {
-  const [ inputValue, setInputValue ] = useState({
-    id: '',
-    content: '',
-  })
+  
+  // getTodos 
+  const getTodos = async() => {
+    await axios.get(`${API_URL}todos`, 
+      {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('jwt-token')}`,
+        }, 
+    })
+    .then(resp => {
+      setTodoList(resp.data)
+    })
+  }
 
-  const [ todoList, setTodoList ] = useState([
-    {id: 1, content: 'default task1'},
-    {id: 2, content: 'default task2'},
-  ]);
+  // getTodos 호출  --> todoList변동일어나면 랜더시켜야할것은데,,ㅠㅠㅠ
+  useEffect(() => {
+    getTodos();
+  }, [])
+
+
+  const [ inputValue, setInputValue ] = useState('')
+
+  const [ todoList, setTodoList ] = useState([]);
 
   // edit 버튼 클릭시, 클릭한 아이템 정보 관리
-const [ selectedItem, setSelectedItem ] = useState(null);
-
-
-  // 랜덤 아이디 생성
-  const randomIdGenerate = () => {
-    return '_' + Math.random().toString(36).substring(2, 9)
-  }
+  const [ selectedItem, setSelectedItem ] = useState({});
 
   // todo-input-value
   const getInputValue = (e) => {
     setInputValue(e.target.value);
   }
 
-  // task 추가 버튼 클릭
-  const addTaskItem = () => {
-    const newTodoList = {
-      id: randomIdGenerate(),
-      content: inputValue
-    }
-    setTodoList(todoList.concat(newTodoList));
+  // createTodo
+  const createTodo = async() => {
+    await axios.post(`${API_URL}todos`, 
+      {
+        todo: inputValue,
+      }, 
+      {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('jwt-token')}`,
+          "Content-Type" : `application/json`,
+        }, 
+    })
+    .then(resp => {
+      const newTodo = resp.data
+      setTodoList([...todoList, newTodo])
+    })
   }
 
-  // delete-task-item
-  const deleteTaskItem  = (id) => {
-    console.log(id)
-    setTodoList(todoList.filter(item => item.id !== id));
+  // deleteTodo
+  const deleteTodo = async(id) => {
+    await axios.delete(`${API_URL}todos/${id}`, 
+      {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('jwt-token')}`,
+        }, 
+    })
+    .then(
+      //랜더를 어떻게 일으키지
+    )
   }
 
-  // edit-button-handler
-  const selectTaskItem = (item) => {  
-    setSelectedItem(item);
+   // edit-button-handler
+  const selectTodoItem = (item) => {  
+    setSelectedItem(item)
   }
 
-  // task 내용 수정
-  const editTaskItem = (itemId, editValue) => {
-    todoList.map(item => (
-      itemId === item.id ? {...todoList, content: editValue} : todoList
-    ))
+  // updateTodo
+  const updateTodo = async (id, isCompleted, editValue) => {
+    await axios.put(`${API_URL}todos/${id}`, 
+      {
+        todo: editValue,
+        isCompleted: isCompleted
+      },
+      {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('jwt-token')}`,
+          "Content-Type": `application/json`
+        }, 
+    })
+    .then(
+      //랜더를 어떻게 일으키지22
+    )
   }
 
 
   return (
     <div>
       <h2>Todo List</h2>
-      <TodoInput getInputValue={getInputValue} addTaskItem={addTaskItem} />
-      <EditMode selectedItem={selectedItem} editTaskItem={editTaskItem}/>
-      <TodoBoard todoList={todoList} selectTaskItem={selectTaskItem} deleteTaskItem={deleteTaskItem}/>
+      <TodoInput getInputValue={getInputValue} createTodo={createTodo}/>
+      <TodoBoard todoList={todoList} selectTodoItem={selectTodoItem} deleteTodo={deleteTodo}/>
+      <EditMode selectedItem={selectedItem} updateTodo={updateTodo}/>
     </div>
   )
 }
