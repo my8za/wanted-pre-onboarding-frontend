@@ -1,12 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-const EditMode = ({ selectedItem, editTaskItem }) => {
+const EditMode = ({ selectedItem, updateTodo }) => {
   const [ editValue, setEditValue ] = useState('');
-  
+
+  useEffect(()=>{
+    if(selectedItem.todo) {
+      return setEditValue(selectedItem.todo)
+    }
+  }, [selectedItem])
+
   const onSubmit = (e) => {
     e.preventDefault();
-    // 에러발생...ㅠㅠ
-    editTaskItem(selectedItem.id, editValue)
+    const { id, isCompleted } = selectedItem;
+    updateTodo(id, isCompleted, editValue)
   }
 
   return (
@@ -15,7 +21,7 @@ const EditMode = ({ selectedItem, editTaskItem }) => {
         <h2>Edit</h2>
         <input 
           data-testid="modify-input"
-          defaultValue={selectedItem && selectedItem.content}
+          defaultValue={editValue}
           onChange={(e) => {setEditValue(e.target.value)}}
         />
         <button type='submit' data-testid="submit-button">제출</button>
@@ -25,4 +31,4 @@ const EditMode = ({ selectedItem, editTaskItem }) => {
   )
 }
 
-export default EditMode
+export default EditMode;
