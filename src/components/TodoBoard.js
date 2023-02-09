@@ -1,11 +1,11 @@
 import React from 'react'
 import TodoItem from './TodoItem'
 
-const TodoBoard = ({ todoList, deleteTodo, selectTodoItem }) => {
+const TodoBoard = ({ todoList, deleteTodo, selectTodoItem, selectedItem, updateTodo, onEdit, setOnEdit }) => {
   return (
-      <ul>
+      <ul className='todo-board'>
         {todoList.map((item, idx) => (
-          <TodoItem key={idx} item={item} selectTodoItem={selectTodoItem} deleteTodo={deleteTodo}/>
+          <TodoItem key={idx} item={item} selectTodoItem={selectTodoItem} deleteTodo={deleteTodo} selectedItem={selectedItem} updateTodo={updateTodo} onEdit={onEdit} setOnEdit={setOnEdit}/>
         ))}
       </ul>
     )
