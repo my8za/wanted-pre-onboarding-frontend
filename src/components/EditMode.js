@@ -1,31 +1,29 @@
 import React, { useState, useEffect } from 'react'
 
-const EditMode = ({ selectedItem, updateTodo }) => {
+const EditMode = ({ selectedItem, updateTodo, setOnEdit }) => {
   const [ editValue, setEditValue ] = useState('');
-
   useEffect(()=>{
     if(selectedItem.todo) {
       return setEditValue(selectedItem.todo)
     }
   }, [selectedItem])
-
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = () => {
     const { id, isCompleted } = selectedItem;
     updateTodo(id, isCompleted, editValue)
   }
 
   return (
     <div>
-      <form onSubmit={onSubmit}>
-        <h2>Edit</h2>
+      <form className='edit-mode'>
         <input 
           data-testid="modify-input"
           defaultValue={editValue}
           onChange={(e) => {setEditValue(e.target.value)}}
         />
-        <button type='submit' data-testid="submit-button">제출</button>
-        <button data-testid="cancel-button">취소</button>
+        <div className='btns'>
+          <button className='btn' data-testid="submit-button"  onClick={onSubmit}>제출</button>
+          <button className='btn' data-testid="cancel-button" onClick={()=>{setOnEdit(false)}}>취소</button>
+        </div>
       </form>
     </div>
   )

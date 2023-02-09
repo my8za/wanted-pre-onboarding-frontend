@@ -1,0 +1,132 @@
+%btn {
+  width: 60px;
+  height: 25px;
+  border-radius: 35px;
+  border: 0;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  background-color: #AF7EEB;
+  font-size: 12px;
+  color: #fff;
+}
+
+
+// common
+body {background-color: #E3E9FF; font-size: 16px; color: #656A7D;}
+
+
+.todo {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 700px;
+  height: 80vh;
+  margin: 55px auto;
+  > button {
+    position: absolute;
+    top: -35px;
+    right: 0;
+    border: 0;
+    background-color: transparent;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6835A7;
+    cursor: pointer;
+  }
+  .todo-title {
+    width: 100%;
+    padding: 20px;
+    margin: 0 0 40px 0;
+    box-sizing: border-box;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    background-color: #AF7EEB;
+    text-align: center;
+    text-shadow: 2px 2px 4px #6835A7;
+    color: #fff;
+  }
+  .todo-input {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 20%;
+    padding: 23px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    box-sizing: border-box;
+    background-color: #F4F2F6;
+    > input {
+      width: 75%; 
+      padding: 0 10px;
+      border: 1px solid rgba(0,0,0,.15); 
+      box-sizing: border-box;
+      color: #656A7D;
+      outline: none;
+    }
+    > button {
+      width: 25%;
+      border: none;
+      background-color: #AF7EEB;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+  .todo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 30px 50px;
+    box-sizing: border-box;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    background-color: #fff;
+    .todo-board {
+      width: 100%;
+      height: 80%;
+      margin-top: 40px;
+      .todo-item {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 20px;
+        > div {
+          width: 100%;
+          .edit-mode {
+          display: flex;
+          justify-content: space-between;
+          width: 95%;
+          > input {
+            width: 75%;
+            padding-left: 10px;
+            box-sizing: border-box;
+            outline: 0;
+          }
+        }
+        }
+        > label {width: 5%;}
+        .todo-content {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          width: 90%;
+        }
+        .btns {
+          display: flex;
+          justify-content: space-between;
+          width: 23%;
+          .btn {
+            @extend %btn;
+            &:hover {
+              background-color: #8F68C0;
+              font-weight: 700;
+              transition: .2s;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
