@@ -12,8 +12,7 @@ const Todo = () => {
   const navigate = useNavigate()
   const [ inputValue, setInputValue ] = useState('')
   const [ todoList, setTodoList ] = useState([]);
-  const [ selectedItem, setSelectedItem ] = useState({});
-  const [ onEdit, setOnEdit ] = useState(false);
+  const [ onEdit, setOnEdit ] = useState([]);
 
   // getTodos 
   const getTodos = async() => {
@@ -32,6 +31,12 @@ const Todo = () => {
   useEffect(() => {
     getTodos();
   }, [])
+  if(onEdit.length <= todoList.length) {
+      todoList.map(todo => (
+        onEdit.push(false)
+      ))
+    }
+  console.log(onEdit)
 
   // todo-input-value
   const getInputValue = (e) => {
@@ -74,18 +79,17 @@ const Todo = () => {
     });
   }
 
-   // edit-button-handler
-  const selectTodoItem = (item) => {  
-    setSelectedItem(item)
-    todoList.map(i => (
-      item.id === i.id ? setOnEdit(true) : <></>
-      // item.id === i.id ? setOnEdit(true) : setOnEdit(false)는 왜 안됨?
-    ))
+   // 수정버튼 클릭 
+  const selectEditBtn = (idx) => {  
+    setOnEdit(
+      onEdit.map((item, index) => 
+        index === idx ? true : onEdit[idx]
+      )
+    )
   }
 
   // updateTodo
   const updateTodo = async (id, isCompleted, editValue) => {
-    console.log(isCompleted)
     await axios.put(`${API_URL}todos/${id}`, 
       {
         todo: editValue,
@@ -99,7 +103,6 @@ const Todo = () => {
     })
     .then((resp) => {
       if (resp.status === 200) { 
-        console.log('성공')
         getTodos(); 
       }
     })
@@ -114,7 +117,7 @@ const Todo = () => {
       <h2 className='todo-title'>Todo List</h2>
       <div className='todo-box'>
         <TodoInput getInputValue={getInputValue} createTodo={createTodo}/>
-        <TodoBoard todoList={todoList} deleteTodo={deleteTodo} selectTodoItem={selectTodoItem} selectedItem={selectedItem} updateTodo={updateTodo} onEdit={onEdit} setOnEdit={setOnEdit}/>
+        <TodoBoard todoList={todoList} deleteTodo={deleteTodo} selectEditBtn={selectEditBtn} updateTodo={updateTodo} onEdit={onEdit} setOnEdit={setOnEdit}/>
       </div>
     </div>
   )
