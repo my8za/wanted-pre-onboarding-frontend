@@ -4,6 +4,8 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 // api url
 import { API_URL } from '../utils/constants/Config';
+// style sheet
+import '../style/signUp.scss';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -11,6 +13,22 @@ const SignIn = () => {
     email: '',
     password: ''
   });
+  
+  // 유효성 검사
+  const [isEmail, setIsEmail] = useState(false)
+  const [isPassword, setIsPassword] = useState(false)
+  const onChangeEmail = (e) => {
+    const regExp = /@/;
+    const currentValue = e.target.value;
+    setForm({...form, email: currentValue})
+    !regExp.test(currentValue) ? setIsEmail(false) : setIsEmail(true)
+  }
+  const onChangePassword = (e) => {
+    const regExp = /^[A-Za-z0-9]{8,}$/;
+    const currentValue = e.target.value;
+    setForm({...form, password: currentValue})
+    !regExp.test(currentValue) ? setIsPassword(false) : setIsPassword(true)
+  }
 
   const handleClickSignIn = async() => {
     await axios.post(`${API_URL}auth/signin`, 
@@ -32,27 +50,45 @@ const SignIn = () => {
     })
     .catch()
   } 
+
   return (
-    <div>
-      <h2>로그인</h2>
-      <form onSubmit={(e) => {e.preventDefault();}}>
-        <div>
-          <label>email</label>
-          <input
-            data-testid="email-input"
-            onChange={(e)=>{setForm({...form, email: e.target.value})}}
-          />
-        </div>
-        <div>
-          <label>password</label>
-          <input
-            data-testid="signin-button"
-            type='password'
-            onChange={(e)=>{setForm({...form, password: e.target.value})}}
-          />
-        </div>
-      </form>
-      <button data-testid="signup-button" onClick={handleClickSignIn}>로그인</button>
+    <div className='page'>
+      <div className='sign-up'>
+        <h2>Welcome back</h2>
+        <form onSubmit={(e) => {e.preventDefault();}}>
+          <div className='input-box'>
+            <label>e-mail</label>
+            <input
+              data-testid="email-input"
+              onChange={(e)=>{onChangeEmail(e)}}
+            />
+          </div>
+          <div className='input-box'>
+            <label>password</label>
+            <input
+              data-testid="signin-button"
+              type='password'
+              onChange={(e)=>{onChangePassword(e)}}
+            />
+          </div>
+        </form>
+        <button 
+          className='btn' 
+          data-testid="signup-button" 
+          onClick={handleClickSignIn}
+          disabled={!(isEmail && isPassword)}
+        >
+          로그인
+        </button>
+      </div>
+      <div className='text-content'>
+        <h3>New here?</h3>
+        <p>
+          Sign up and discover great<br/>
+          amount of new opportunities!
+        </p>
+        <button className='btn-move' onClick={()=>{navigate('/signup')}}>Sign Up</button>
+      </div>
     </div>
   )
 }
