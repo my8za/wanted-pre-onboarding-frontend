@@ -4,8 +4,6 @@ import { Routes, Route } from 'react-router-dom';
 // components
 import Home from './page/Home';
 import { CheckSignInPath, CheckSignUpPath } from './route/PrivateRoute';
-import SignIn from './page/SignIn';
-import SignUp from './page/SignUp';
 
 function App() {
   return (
@@ -13,10 +11,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Home/>}/>
         {/* Redirect */}
-        <Route path='/signup' element={<SignUp/>}/>
-        <Route path='/signin' element={<SignIn/>}/>
-        {/* <Route path='/signup' element={<CheckSignUpPath/>}/>
-        <Route path='/signin' element={<CheckSignInPath/>}/> */}
+        <Route path='/signup' element={<CheckSignUpPath/>}/>
+        <Route path='/signin' element={<CheckSignInPath/>}/>
         <Route path='/todo' element={<CheckSignInPath />}/>
       </Routes>
     </div>
